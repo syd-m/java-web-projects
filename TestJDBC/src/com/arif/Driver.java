@@ -1,7 +1,7 @@
 package com.arif;
 import java.sql.*;
 public class Driver {
-	//uploaded in git
+	//uploaded in github
 	public static void main(String[] args) {
 
 		String URL = "jdbc:mysql://localhost/hms";
