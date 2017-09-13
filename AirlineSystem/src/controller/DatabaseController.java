@@ -18,7 +18,7 @@ public class DatabaseController {
     	 java.sql.Connection connection = null;
     	 try {
  	    		//Connecting to the database
-	    	 	String url = "jdbc:mysql://localhost/test";
+	    	 	String url = "jdbc:mysql://localhost/airlines";
 	    	    String username = "root"; 
 	    	    String password = "password";
 	    	    
@@ -42,7 +42,7 @@ public class DatabaseController {
 	    	
     			 conn = getDBConnection();
     
-    			 String sql = "select flight_number,weekdays from test.flight where departure_airport_code=? and Arrival_airport_code=?";
+    			 String sql = "select flight_number,weekdays from airlines.flight where departure_airport_code=? and Arrival_airport_code=?";
     	         PreparedStatement statement = conn.prepareStatement(sql);
     	         statement.setString(1, from);
     	         statement.setString(2, to);
@@ -75,7 +75,7 @@ public class DatabaseController {
 	    	
     			 conn = getDBConnection();
     
-    			 String sql = "select * from test.fare where flight_number=?";
+    			 String sql = "select * from airlines.fare where flight_number=?";
     	         PreparedStatement statement = conn.prepareStatement(sql);
     	         statement.setInt(1, fno);
     	         
@@ -106,7 +106,7 @@ public class DatabaseController {
 	    	
     			 conn = getDBConnection();
     
-    			 String sql = "select ((select total_number_of_seats from test.airplane a, test.flight_instance f where a.airplane_id = f.airplane_id and f.flight_number ="+fno+" and f.date='"+date+"') - (select count(*) from test.seat_reservation s where s.flight_number = "+fno+" and s.date='"+date+"'));";
+    			 String sql = "select ((select total_number_of_seats from airlines.airplane a, airlines.flight_instance f where a.airplane_id = f.airplane_id and f.flight_number ="+fno+" and f.date='"+date+"') - (select count(*) from airlines.seat_reservation s where s.flight_number = "+fno+" and s.date='"+date+"'));";
     	         PreparedStatement statement = conn.prepareStatement(sql);
     	         
     	         // Executing the prepared Statement
@@ -139,7 +139,7 @@ public class DatabaseController {
 	    	
     			 conn = getDBConnection();
     
-    			 String sql = "select seat_number,customer_name,customer_phone from test.seat_reservation where flight_number="+fno+" and date='"+date+"';";
+    			 String sql = "select seat_number,customer_name,customer_phone from airlines.seat_reservation where flight_number="+fno+" and date='"+date+"';";
     	         PreparedStatement statement = conn.prepareStatement(sql);
     	         
     	         // Executing the prepared Statement
@@ -170,7 +170,7 @@ public class DatabaseController {
 	    	
     			 conn = getDBConnection();
     
-    			 String sql = "select s.flight_number,s.date, s.seat_number, f.departure_airport_code, f.arrival_airport_code,f.scheduled_departure_time, f.scheduled_arrival_time from test.flight f, test.seat_reservation s where f.flight_number = s.flight_number and s.customer_name =?";
+    			 String sql = "select s.flight_number,s.date, s.seat_number, f.departure_airport_code, f.arrival_airport_code,f.scheduled_departure_time, f.scheduled_arrival_time from airlines.flight f, airlines.seat_reservation s where f.flight_number = s.flight_number and s.customer_name =?";
     	         PreparedStatement statement = conn.prepareStatement(sql);
     	         statement.setString(1, name);
     	         
@@ -202,7 +202,7 @@ public class DatabaseController {
 	    	
     			 conn = getDBConnection();
     
-    			 String sql = "select departure_airport_code, arrival_airport_code,scheduled_departure_time, scheduled_arrival_time from test.flight where flight_number="+fno+";";
+    			 String sql = "select departure_airport_code, arrival_airport_code,scheduled_departure_time, scheduled_arrival_time from airlines.flight where flight_number="+fno+";";
     	         PreparedStatement statement = conn.prepareStatement(sql);
     	      
     	         
@@ -236,7 +236,7 @@ public class DatabaseController {
 			 conn = getDBConnection();
 
 			 String sql = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time, f1.weekdays from "
-			 		+ "test.flight f1 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code='"+to+"';";
+			 		+ "airlines.flight f1 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code='"+to+"';";
 	         PreparedStatement statement = conn.prepareStatement(sql);
 	      
 	         
@@ -272,7 +272,7 @@ public class DatabaseController {
 			 // Monday
 			 String sql1 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					 + "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					 + "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					 + "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					 + "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Mon%' AND f2.weekdays like '%Mon%'));";
 	         PreparedStatement statement1 = conn.prepareStatement(sql1);
 	      
@@ -291,7 +291,7 @@ public class DatabaseController {
 			// Tuesday
 			String sql2 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					 + "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					 + "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					 + "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					 + "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Tue%' AND f2.weekdays like '%Tue%'));";
 	         PreparedStatement statement2 = conn.prepareStatement(sql2);
 	      
@@ -309,7 +309,7 @@ public class DatabaseController {
 			// Wednesday
 			String sql3 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					+ "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					+ "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					+ "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					+ "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Wed%' AND f2.weekdays like '%Wed%'));";
 			PreparedStatement statement3 = conn.prepareStatement(sql3);
 
@@ -327,7 +327,7 @@ public class DatabaseController {
 			// Thursday
 			String sql4 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					+ "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					+ "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					+ "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					+ "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Thu%' AND f2.weekdays like '%Thu%'));";
 			PreparedStatement statement4 = conn.prepareStatement(sql4);
 
@@ -345,7 +345,7 @@ public class DatabaseController {
 			// Friday
 			String sql5 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					+ "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					+ "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					+ "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					+ "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Fri%' AND f2.weekdays like '%Fri%'));";
 			PreparedStatement statement5 = conn.prepareStatement(sql5);
 
@@ -363,7 +363,7 @@ public class DatabaseController {
 			// Saturday
 			String sql6 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					+ "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					+ "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					+ "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					+ "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Sat%' AND f2.weekdays like '%Sat%'));";
 			PreparedStatement statement6 = conn.prepareStatement(sql6);
 
@@ -381,7 +381,7 @@ public class DatabaseController {
 			// Sunday
 			String sql7 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					+ "f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time from "
-					+ "test.flight f1, test.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
+					+ "airlines.flight f1, airlines.flight f2 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code AND "
 					+ "f2.arrival_airport_code='"+to+"' AND ((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600)) AND ((f1.weekdays like '%Sun%' AND f2.weekdays like '%Sun%'));";
 			PreparedStatement statement7 = conn.prepareStatement(sql7);
 
@@ -418,7 +418,7 @@ public class DatabaseController {
 			 String sql1 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 					 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 					 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-					 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+					 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 					 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 					 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 					 		+"((f1.weekdays like '%Mon%' AND f2.weekdays like '%Mon%' AND f3.weekdays like '%Mon%'));";
@@ -441,7 +441,7 @@ public class DatabaseController {
 			String sql2 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 			 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 			 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-			 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+			 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 			 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 			 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 			 		+"((f1.weekdays like '%Tue%' AND f2.weekdays like '%Tue%' AND f3.weekdays like '%Tue%'));";
@@ -463,7 +463,7 @@ public class DatabaseController {
 			String sql3 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 			 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 			 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-			 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+			 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 			 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 			 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 			 		+"((f1.weekdays like '%Wed%' AND f2.weekdays like '%Wed%' AND f3.weekdays like '%Wed%'));";
@@ -485,7 +485,7 @@ public class DatabaseController {
 			String sql4 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 			 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 			 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-			 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+			 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 			 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 			 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 			 		+"((f1.weekdays like '%Thu%' AND f2.weekdays like '%Thu%' AND f3.weekdays like '%Thu%'));";
@@ -507,7 +507,7 @@ public class DatabaseController {
 			String sql5 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 			 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 			 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-			 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+			 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 			 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 			 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 			 		+"((f1.weekdays like '%Fri%' AND f2.weekdays like '%Fri%' AND f3.weekdays like '%Fri%'));";
@@ -529,7 +529,7 @@ public class DatabaseController {
 			String sql6 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 			 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 			 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-			 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+			 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 			 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 			 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 			 		+"((f1.weekdays like '%Sat%' AND f2.weekdays like '%Sat%' AND f3.weekdays like '%Sat%'));";
@@ -551,7 +551,7 @@ public class DatabaseController {
 			String sql7 = "select f1.flight_number, f1.departure_airport_code,f1.arrival_airport_code, f1.scheduled_departure_time, f1.scheduled_arrival_time," 
 			 		+"f2.flight_number, f2.departure_airport_code, f2.arrival_airport_code, f2.scheduled_departure_time, f2.scheduled_arrival_time,"
 			 		+"f3.flight_number, f3.departure_airport_code, f3.arrival_airport_code, f3.scheduled_departure_time, f3.scheduled_arrival_time from "
-			 		+"test.flight f1, test.flight f2, test.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
+			 		+"airlines.flight f1, airlines.flight f2, airlines.flight f3 where f1.departure_airport_code = '"+from+"' AND f1.arrival_airport_code = f2.departure_airport_code "
 			 		+"AND f2.arrival_airport_code = f3.departure_airport_code  AND f3.arrival_airport_code='"+to+"' AND "
 			 		+ "((f2.scheduled_departure_time - f1.scheduled_arrival_time > 3600) AND (f3.scheduled_departure_time - f2.scheduled_arrival_time > 3600)) AND"
 			 		+"((f1.weekdays like '%Sun%' AND f2.weekdays like '%Sun%' AND f3.weekdays like '%Sun%'));";
