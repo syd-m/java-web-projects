@@ -17,7 +17,7 @@ public class DatabaseController {
     	 
     	 java.sql.Connection connection = null;
     	 try {
- 	    	
+ 	    		//Connecting to the database
 	    	 	String url = "jdbc:mysql://localhost/test";
 	    	    String username = "root"; 
 	    	    String password = "password";
