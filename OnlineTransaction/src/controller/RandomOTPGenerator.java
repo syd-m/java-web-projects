@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 public class RandomOTPGenerator {
-	 public static String generateSessionKey(){
+	 public String generateSessionKey(){
 		  String alphabet = 
 		          new String("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"); //9
 		  int n = alphabet.length(); //10
