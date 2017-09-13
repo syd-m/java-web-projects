@@ -5,6 +5,8 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.apache.catalina.mbeans.ClassNameMBean;
+
 public class MailUtility {
 
 
